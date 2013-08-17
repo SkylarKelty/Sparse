@@ -1,8 +1,5 @@
-ORG 0
-BITS 16
-jmp 07C0h:start
-
-start: jmp load
+[BITS 16]
+[ORG 0x7C00]
 
 ; Messages
 load_str db 'Loading second stage...', 0
