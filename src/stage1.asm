@@ -5,8 +5,8 @@ jmp 07C0h:start
 start: jmp load
 
 ; Messages
-welcome_str db 'Welcome to Sparse!', 0
-load_str db 0x0a, 'Loading second stage...', 0
+load_str db 'Loading second stage...', 0
+boot_str db 0x0a, 'Booting to second stage...', 0
 
 ; Begin load
 load:
@@ -23,24 +23,9 @@ load:
     ; Clear screen
     call cls
 
-    ; Print welcome
-    mov si, welcome_str
-    call print
-
-    ; Move to beginning of line
-    mov dx, 0
-    call move_cursor
-
-    ; Print loading message
-    mov si, load_str
-    call print
-
     ; And actually start to load..
     call reset
-
-    ; Loop
-    jmp $
-
+    jmp read_sector
 
 ; Our first function: move_cursor
 move_cursor:
@@ -83,6 +68,37 @@ reset:
     int 0x13
     jc reset
     ret
+
+; Read a sector
+read_sector:
+    ; Print loading message
+    mov si, load_str
+    call print
+
+    ; We will be starting at 0x8000
+    mov bx, 0x8000
+    mov es, bx
+    mov bx, 0x0000
+
+    ; Begin read. Order is (function, sectors, cylinder, sector, head, drive)
+    mov ah, 0x02
+    mov al, 0x03
+    mov ch, 0x00
+    mov cl, 0x02
+    mov dh, 0x00
+    mov dl, 0x00
+    int 0x13
+    jc read_sector
+
+    ; Move to beginning of line
+    mov dx, 0
+    call move_cursor
+
+    ; Print jump message
+    mov si, boot_str
+    call print
+
+    jmp 0x8000
 
 ; Fill up to 512 bytes
 times 510-($-$$) db 0
