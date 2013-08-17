@@ -5,7 +5,7 @@ jmp 07C0h:start
 start: jmp load
 
 ; Parameter block
-times 0Bh-$+start DB 0
+bpbOEM                  DB "Sparse OS"
 bpbBytesPerSector:      DW 512
 bpbSectorsPerCluster:   DB 1
 bpbReservedSectors:     DW 1
