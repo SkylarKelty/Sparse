@@ -1,4 +1,6 @@
 BITS 16
+ORG 0
+jmp 07C0h:start
 
 start:
     mov ax, 07C0h   ; Set up 4K stack space after this bootloader
