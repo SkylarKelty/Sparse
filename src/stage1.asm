@@ -35,6 +35,9 @@ load:
     mov si, load_str
     call print
 
+    ; And actually start to load..
+    call reset
+
     ; Loop
     jmp $
 
@@ -71,6 +74,14 @@ cls:
     mov dh, 24
     mov dl, 79
     int 10h
+    ret
+
+; Reset the disk
+reset:
+    mov ah, 0x00
+    mov dl, 0x00
+    int 0x13
+    jc reset
     ret
 
 ; Fill up to 512 bytes
