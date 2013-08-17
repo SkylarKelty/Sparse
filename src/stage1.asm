@@ -28,7 +28,6 @@ load:
     call cls
 
     ; And actually start to load..
-    call reset
     jmp read_sector
 
 ; Our first function: move_cursor
@@ -75,9 +74,16 @@ reset:
 
 ; Read a sector
 read_sector:
+    call reset
+    
     ; Print loading message
     mov si, load_str
     call print
+
+    ; Setup to read
+    mov bx, 0x8000
+    mov es, bx
+    mov bx, 0x0000
 
     ; Begin read
     mov ah, 2  ; Function (read)
@@ -86,7 +92,6 @@ read_sector:
     mov cl, 2  ; Sector
     mov dh, 0  ; Head
     mov dl, 0  ; Drive
-    mov bx, 0x7e00
     int 0x13
     jc read_sector
 
@@ -98,7 +103,7 @@ read_sector:
     mov si, boot_str
     call print
 
-    jmp 0x7e00
+    jmp 0x8000
 
 ; Fill up to 512 bytes
 times 510-($-$$) db 0
