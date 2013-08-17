@@ -86,7 +86,7 @@ read_sector:
     mov cl, 2  ; Sector
     mov dh, 0  ; Head
     mov dl, 0  ; Drive
-    mov bx, 0x8000
+    mov bx, 0x7e00
     int 0x13
     jc read_sector
 
@@ -98,7 +98,7 @@ read_sector:
     mov si, boot_str
     call print
 
-    jmp 0x8000
+    jmp 0x7e00
 
 ; Fill up to 512 bytes
 times 510-($-$$) db 0
