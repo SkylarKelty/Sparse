@@ -4,15 +4,15 @@ jmp 07C0h:start
 
 start: jmp load
 
-; Load our text
-text_string db 'Welcome to Sparse!', 0
+; Messages
+welcome_str db 'Welcome to Sparse!', 0
+load_str db 0x0a, 'Loading second stage...', 0
 
 ; Begin load
 load:
-    ; Set up 4K stack space after this bootloader
-    ; (4096 + 512) / 16 bytes per paragraph
+    ; Set up 8K stack space after this bootloader
     mov ax, 07C0h
-    add ax, 288
+    add ax, 544
     mov ss, ax
     mov sp, 4096
 
@@ -20,18 +20,33 @@ load:
     mov ax, 07C0h
     mov ds, ax
 
-    mov si, text_string
+    ; Clear screen
+    call cls
+
+    ; Print welcome
+    mov si, welcome_str
     call print
 
-    ; This grabs the amount of KB we have
-    xor ax, ax
-    int 0x12
+    ; Move to beginning of line
+    mov dx, 0
+    call move_cursor
 
-    ; Exit
-    cli
-    hlt
+    ; Print loading message
+    mov si, load_str
+    call print
 
-; Our first function: print!
+    ; Loop
+    jmp $
+
+
+; Our first function: move_cursor
+move_cursor:
+    mov bh, 0
+    mov ah, 2
+    int 10h
+    ret
+
+; Our second function: print
 print:
     mov ah, 0Eh
 
@@ -43,6 +58,19 @@ print:
     jmp .repeat
 
 .done:
+    ret
+
+; Our third function: clear screen
+cls:
+    mov dx, 0
+    call move_cursor
+    mov ah, 6
+    mov al, 0
+    mov bh, 7
+    mov cx, 0
+    mov dh, 24
+    mov dl, 79
+    int 10h
     ret
 
 ; Fill up to 512 bytes
