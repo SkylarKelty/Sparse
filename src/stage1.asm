@@ -1,5 +1,5 @@
-BITS 16
 ORG 0
+BITS 16
 jmp 07C0h:start
 
 ; Begin load
