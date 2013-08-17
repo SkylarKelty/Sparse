@@ -10,9 +10,13 @@ boot_str db 0x0a, 'Booting to second stage...', 0
 
 ; Begin load
 load:
-    ; Set up 8K stack space after this bootloader
+    ; Initialize segment registers
+    xor ax, ax
+    mov es, ax
+
+    ; Set up 4K stack space after this bootloader
     mov ax, 07C0h
-    add ax, 544
+    add ax, 288
     mov ss, ax
     mov sp, 4096
 
