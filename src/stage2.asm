@@ -15,5 +15,3 @@ run:
 
     ; Loop here
     jmp $
-
-times 1024-($-$$) db 0
