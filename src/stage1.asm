@@ -91,8 +91,18 @@ read_sector:
     mov si, boot_str
     call print
 
-    ; Load protected mode (todo)
+    ; Load protected mode
+    ;cli
+    ;lgdt [gdtr]
+    ;mov eax, cr0 
+    ;or al, 1
+    ;mov cr0, eax
 
+    ; Jump to protected mode
+    ;jmp 08h:pmode
+
+;pmode:
+;    use32
     jmp 0x8000
 
 ; Fill up to 512 bytes
