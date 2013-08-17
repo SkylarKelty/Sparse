@@ -1,4 +1,4 @@
-    BITS 16
+BITS 16
 
 start:
     ; Set up 4K stack space after this bootloader
@@ -33,6 +33,6 @@ print:
 .done:
     ret
 
-    ; This is needed by x86
-    times 510-($-$$) db 0
-    dw 0xAA55
+; Fill up to 512 bytes
+times 510-($-$$) db 0
+dw 0xAA55
