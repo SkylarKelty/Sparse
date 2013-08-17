@@ -2,38 +2,40 @@ BITS 16
 ORG 0
 jmp 07C0h:start
 
+; Begin load
 start:
-    mov ax, 07C0h   ; Set up 4K stack space after this bootloader
-    add ax, 288     ; (4096 + 512) / 16 bytes per paragraph
+    ; Set up 4K stack space after this bootloader
+    ; (4096 + 512) / 16 bytes per paragraph
+    mov ax, 07C0h
+    add ax, 288
     mov ss, ax
     mov sp, 4096
 
-    mov ax, 07C0h   ; Set data segment to where we are loaded
+    ; Set data segment to where we are loaded
+    mov ax, 07C0h
     mov ds, ax
 
+    mov si, text_string
+    call print
 
-    mov si, text_string ; Put string position into SI
-    call print_string   ; Call our string-printing routine
-
-    jmp $               ; Infinite loop!
-
+    jmp $ ; Infinite loop!
 
     text_string db 'Welcome to Sparse!', 0
 
-
-print_string:       ; Routine: output string in SI to screen
-    mov ah, 0Eh     ; int 10h 'print char' function
+; Our first function: print!
+print:
+    mov ah, 0Eh
 
 .repeat:
-    lodsb           ; Get character from string
+    lodsb
     cmp al, 0
-    je .done        ; If char is zero, end of string
-    int 10h         ; Otherwise, print it
+    je .done
+    int 10h ; This outputs
     jmp .repeat
 
 .done:
     ret
 
-
+; Fill up to 512 bytes
 times 510-($-$$) db 0
 dw 0xAA55
