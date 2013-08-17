@@ -10,17 +10,7 @@ boot_str db 0x0a, 'Booting to second stage...', 0
 
 ; Begin load
 load:
-    ; Initialize segment registers
-    xor ax, ax
-    mov es, ax
-
-    ; Set up 4K stack space after this bootloader
-    mov ax, 07C0h
-    add ax, 288
-    mov ss, ax
-    mov sp, 4096
-
-    ; Set data segment to where we are loaded
+    ; Setup data segment
     mov ax, 07C0h
     mov ds, ax
 
@@ -75,7 +65,7 @@ reset:
 ; Read a sector
 read_sector:
     call reset
-    
+
     ; Print loading message
     mov si, load_str
     call print
