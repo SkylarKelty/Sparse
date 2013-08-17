@@ -25,6 +25,9 @@ bsSerialNumber:         DD 0xa0a1a2a3
 bsVolumeLabel:          DB "MOS FLOPPY"
 bsFileSystem:           DB "FAT12"
 
+; Load our text
+text_string db 'Welcome to Sparse!', 0
+
 ; Begin load
 load:
     ; Set up 4K stack space after this bootloader
@@ -41,9 +44,13 @@ load:
     mov si, text_string
     call print
 
-    jmp $ ; Infinite loop!
+    ; This grabs the amount of KB we have
+    xor ax, ax
+    int 0x12
 
-    text_string db 'Welcome to Sparse!', 0
+    ; Exit
+    cli
+    hlt
 
 ; Our first function: print!
 print:
