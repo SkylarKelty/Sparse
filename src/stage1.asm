@@ -1,5 +1,8 @@
-[BITS 16]
-[ORG 0x7C00]
+ORG 0
+BITS 16
+jmp 07C0h:start
+
+start: jmp load
 
 ; Messages
 load_str db 'Loading second stage...', 0
@@ -26,12 +29,12 @@ move_cursor:
 
 ; Our second function: print
 print:
-    mov ah, 0Eh
+    mov ah, 0x0E
 
 .repeat:
     lodsb
-    cmp al, 0
-    je .done
+    or al, al
+    jz .done
     int 10h ; This outputs
     jmp .repeat
 
