@@ -1,5 +1,5 @@
+use16
 ORG 0
-BITS 16
 jmp 07C0h:start
 
 ; Messages
@@ -90,6 +90,8 @@ read_sector:
     ; Print jump message
     mov si, boot_str
     call print
+
+    ; Load protected mode (todo)
 
     jmp 0x8000
 
