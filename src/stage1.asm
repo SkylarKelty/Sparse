@@ -75,18 +75,14 @@ read_sector:
     mov si, load_str
     call print
 
-    ; We will be starting at 0x8000
+    ; Begin read
+    mov ah, 2  ; Function (read)
+    mov al, 24 ; 24 Sectors (12kb)
+    mov ch, 0  ; Cylinder
+    mov cl, 2  ; Sector
+    mov dh, 0  ; Head
+    mov dl, 0  ; Drive
     mov bx, 0x8000
-    mov es, bx
-    mov bx, 0x0000
-
-    ; Begin read. Order is (function, sectors, cylinder, sector, head, drive)
-    mov ah, 0x02
-    mov al, 0x03
-    mov ch, 0x00
-    mov cl, 0x02
-    mov dh, 0x00
-    mov dl, 0x00
     int 0x13
     jc read_sector
 
