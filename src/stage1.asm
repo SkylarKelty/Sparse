@@ -24,7 +24,7 @@ load:
 move_cursor:
     mov bh, 0
     mov ah, 2
-    int 10h
+    int 0x10
     ret
 
 ; Our second function: print
@@ -35,7 +35,7 @@ print:
     lodsb
     or al, al
     jz .done
-    int 10h ; This outputs
+    int 0x10 ; This outputs
     jmp .repeat
 
 .done:
@@ -51,7 +51,7 @@ cls:
     mov cx, 0
     mov dh, 24
     mov dl, 79
-    int 10h
+    int 0x10
     ret
 
 ; Reset the disk
