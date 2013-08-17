@@ -1,4 +1,4 @@
-    BITS 16
+BITS 16
 
 start:
     mov ax, 07C0h   ; Set up 4K stack space after this bootloader
@@ -33,5 +33,5 @@ print_string:       ; Routine: output string in SI to screen
     ret
 
 
-    times 510-($-$$) db 0
-    dw 0xAA55
+times 510-($-$$) db 0
+dw 0xAA55
